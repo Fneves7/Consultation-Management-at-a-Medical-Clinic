@@ -10,7 +10,9 @@
 //DEFINES
 #define TOTAL_MED 45
 
+
 int menu(){
+	printf("O Neves é gamer e joga Fortnite: Endgame!");
 	int opc=0;
 	system("cls");
 	printf("\t\t CLINICA MEDICA\n\n");

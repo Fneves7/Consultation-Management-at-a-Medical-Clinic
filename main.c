@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-//NOSSOS CABECALHOS
+//CABECALHOS FEITOS POR NÓS
 #include "medicos.h"
 #include "pacientes.h"
 #include "fechos.h"
@@ -19,7 +19,7 @@ int menu(){
 	printf("1- Medicos\n");
 	printf("2- Pacientes Consultas\n");
 	printf("3- Fechos\n");	
-	printf("0- Sair\n");
+	printf("0- Sair\n\n");
 	printf(">"); scanf("%i",&opc);
 	return opc;
 }

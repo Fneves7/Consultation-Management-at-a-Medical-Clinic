@@ -2,27 +2,22 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <string.h>
-
 #define TOTAL_MED 45
 
 typedef struct medico{
-	int n_ordem;
-	char nome[100];
-	int numero, NIF;
-	char morada[100];
-	int telefone;
-	char data_entrada[11];
+	int n_ordem, numero, NIF, telefone;
+	char nome[100], morada[100], data_entrada[11];
 }MEDICO;
 
 typedef struct elem{
 	MEDICO info;
-	struct elem *seguinte;
-}ELEM;
+	struct elem *anterior, *seguinte;
+}ELEMENTO;
 
 int menuMed();
-MEDICO inserirMedico(MEDICO medicos[], int num);
-int inserirFimLista(ELEM **iniLista, MEDICO newMedico);
+MEDICO inserirMedico(int *num);
+int inserirFimLista(ELEMENTO **iniLista, ELEMENTO **fimLista, MEDICO newMedico);
+int listaMedicos(ELEMENTO *iniLista);
 
 int gravaMedicos(MEDICO medico[], int num);
 int lerMedicos(MEDICO medicos[]);
-void listaMedicos(MEDICO medicos[], int num);

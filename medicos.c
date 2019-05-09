@@ -86,39 +86,46 @@ int gravaMedicos(ELEMENTO *iniLista){
 	FILE *fp = NULL;
 	ELEMENTO *aux=NULL;
 	int res=0;
-	fp=fopen("Medicos.txt", "wb");
+	fp=fopen("Medicos.dat", "wb");
 	
 	if(fp==NULL){
 		printf("Erro no ficheiro!\n");
 		system("pause"); return -1;
 	}
 	
-	for(aux = iniLista; aux != NULL; aux=aux->seguinte){
-		fwrite(fp,"%i, - %s \n", aux->info.numero, aux->info.nome);
+	for(aux=iniLista; aux!=NULL; aux=aux->seguinte){
+		fwrite(aux, sizeof(MEDICO), 1, fp);
 	}
 	fclose(fp); return 0;
-	
-		result = fwrite(&alunos[0], sizeof(ALUNO),10,fp);
-	printf("Escreveu %i registos\n", result);
-	fclose(fp);
-	return result;	
 }
 
 int lerMedicos(ELEMENTO *iniLista){
 	
-	/*FILE *fp = NULL; 
+	FILE *fp = NULL;
 	ELEMENTO *aux=NULL;
 	
 	int res=0;
-	fp=fopen("Medicos.txt", "r");
+	fp=fopen("Medicos.dat", "rb");
 	if(fp==NULL){
 		printf("Erro no ficheiro!\n"); return -1;		
 	}
 	
-	res = fread(*iniLista, sizeof(int), 1, fp);
+	fread(aux,sizeof(MEDICO),1,fp);
+	
+	for(int i = 0; i < ){
+		printf("%i: %i - %s - %i - %s - %i - %s\n",
+		aux->info.numero,
+		aux->info.n_ordem,
+		aux->info.nome,
+		aux->info.NIF,
+		aux->info.morada, 
+		aux->info.telefone, 
+		aux->info.data_entrada);
+	}
+	system("pause");
 	
 	fclose(fp);
-	return res;*/
+	return res;
 }
 
 //menu de medicos
@@ -162,6 +169,8 @@ int menuMed(){
 				gravaMedicos(iniLista);
 				lerMedicos(iniLista);
 			break;
+			
+			case 10: lerMedicos(iniLista); break;
 			
 		}		
 	}while(opc != 0);	

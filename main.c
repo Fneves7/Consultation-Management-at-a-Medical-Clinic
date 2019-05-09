@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 			case 1: menuMed(); break;
 			case 2: menuPac(); break;
 			case 3: menuFecho(); break;
-			case 0:system("cls"); printf("A ENCERRAR APLICACAO...\n"); break;
+			case 0:system("cls"); printf("\n\t\tA ENCERRAR APLICACAO...\n"); break;
 			default: printf("Opcao errada!\n");
 		}
 	}while(opcao !=0);

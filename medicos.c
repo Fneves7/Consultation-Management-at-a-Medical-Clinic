@@ -3,11 +3,15 @@
 MEDICO inserirMedico(int *num){
 	
 	MEDICO aux;
+
+	(*num)++;
+	aux.numero = (*num);
 	
-	/*if(num >= TOTAL_MED){
+	if(aux.numero >= TOTAL_MED){
 		printf("Nao aceita mais inscricoes!\n");
-		//return -1;
-	}*/
+		system("pause");
+		return;
+	}
 	
 	printf("Introduza o nº da Ordem do Médicos:\n");
 	scanf("%i", &aux.n_ordem);
@@ -60,8 +64,8 @@ int listaMedicos(ELEMENTO *iniLista){
 	
 	ELEMENTO *aux=NULL;
 	if(iniLista <= NULL){
-		printf("Nao existem dados\n"); 
-		return -1;
+		printf("Nao existem dados\n");
+		system("pause"); return -1;
 	}
 	
 	for(aux = iniLista; aux != NULL; aux=aux->seguinte){
@@ -78,41 +82,43 @@ int listaMedicos(ELEMENTO *iniLista){
 	
 }
 
-int gravaMedicos(MEDICO medicos[], int n_ordem){
-	FILE *fp = NULL; int res=0;
-	fp=fopen("Medicos.dat", "wb");
+int gravaMedicos(ELEMENTO *iniLista){
+	FILE *fp = NULL;
+	ELEMENTO *aux=NULL;
+	int res=0;
+	fp=fopen("Medicos.txt", "wb");
 	
 	if(fp==NULL){
 		printf("Erro no ficheiro!\n");
-		return -1;
+		system("pause"); return -1;
 	}
 	
-	fwrite(&n_ordem, sizeof(int), 1, fp);
-	res = fwrite(&medicos[0], sizeof(MEDICO), n_ordem, fp);
-	printf("Escreveu %i registos\n", res);
+	for(aux = iniLista; aux != NULL; aux=aux->seguinte){
+		fwrite(fp,"%i, - %s \n", aux->info.numero, aux->info.nome);
+	}
+	fclose(fp); return 0;
+	
+		result = fwrite(&alunos[0], sizeof(ALUNO),10,fp);
+	printf("Escreveu %i registos\n", result);
 	fclose(fp);
-	return res;
+	return result;	
 }
 
-int lerMedicos(MEDICO medicos[]){
+int lerMedicos(ELEMENTO *iniLista){
 	
-	FILE *fp = NULL; 
-	int n_ordem=0; int res=0;
-	fp=fopen("Medicos.dat", "rb");
+	/*FILE *fp = NULL; 
+	ELEMENTO *aux=NULL;
+	
+	int res=0;
+	fp=fopen("Medicos.txt", "r");
 	if(fp==NULL){
 		printf("Erro no ficheiro!\n"); return -1;		
 	}
 	
-	res = fread(&n_ordem, sizeof(int), 1, fp);
-	
-	if(n_ordem > 0){
-		res = fread(&medicos[0], sizeof(MEDICO), n_ordem, fp);
-	}
-	
-	printf("Leu %i registos \n", res);
+	res = fread(*iniLista, sizeof(int), 1, fp);
 	
 	fclose(fp);
-	return n_ordem;
+	return res;*/
 }
 
 //menu de medicos
@@ -130,7 +136,7 @@ int menuMed(){
 		printf("1- Criar especialidades e preços das consultas\n");
 		printf("2- Listar informação sobre as especialidades\n");
 		printf("3- Alterar preços das consultas\n");
-		printf("4- Acrescentar informação sobre um médico. A cada médico deve ser atribuído um codigo interno a aplicacao (n sequencial)\n");
+		printf("4- Acrescentar informação sobre um médico.\n");
 		printf("5- Listar informação sobre todos os médicos da clínica por ordem alfabética do nome\n");
 		printf("6- Alterar a informação sobre o médico, nomeadamente a morada e nº telefone\n");
 		printf("7- Listar todos os médicos de uma determinada especialidade\n");
@@ -143,13 +149,18 @@ int menuMed(){
 			default: printf("Opcao Errada\n");
 			case 0: return -1; break;
 			
-			case 1: 
+			case 2:
+				listaMedicos(iniLista); 
+			break;
+			
+			case 4: 
 				newMedico = inserirMedico(&num);
 				inserirFimLista(&iniLista, &fimLista, newMedico);
 			break;
 			
-			case 2:
-				listaMedicos(iniLista); 
+			case 9:
+				gravaMedicos(iniLista);
+				lerMedicos(iniLista);
 			break;
 			
 		}		

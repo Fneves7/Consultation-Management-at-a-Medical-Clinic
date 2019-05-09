@@ -19,5 +19,6 @@ MEDICO inserirMedico(int *num);
 int inserirFimLista(ELEMENTO **iniLista, ELEMENTO **fimLista, MEDICO newMedico);
 int listaMedicos(ELEMENTO *iniLista);
 
-int gravaMedicos(MEDICO medico[], int num);
-int lerMedicos(MEDICO medicos[]);
+//Ficheiros
+int gravaMedicos(ELEMENTO *iniLista);
+int lerMedicos(ELEMENTO *iniLista);

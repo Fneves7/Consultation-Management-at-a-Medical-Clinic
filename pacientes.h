@@ -6,12 +6,14 @@
 #define TOTAL_MED 45
 
 typedef struct pacientes{
-	int n_ordem;
 	char nome[100];
-	int numero, NIF;
-	char morada[100];
+	int SNS;
 	int telefone;
-	char data_entrada[11];
+	char morada[50];
+	int NIF;
+	char CC[12];
+	char data_nascimento[11];
+	int num;
 }PACIENTE;
 
 int menuPac();

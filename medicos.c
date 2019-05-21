@@ -57,7 +57,7 @@ int inserirFimLista(ELEMENTO **iniLista, ELEMENTO **fimLista, MEDICO newMedico){
 		novo->anterior = *fimLista;
 		(*fimLista)->seguinte=novo;	
 		*fimLista = novo;
-	}return 0;
+	}return 0; 
 }
 
 int listaMedicos(ELEMENTO *iniLista){
@@ -99,6 +99,30 @@ int gravaMedicos(ELEMENTO *iniLista){
 	fclose(fp); return 0;
 }
 
+int gravaEspecialidadesMedicos(ELEMENTO *iniLista){
+	
+	FILE *fp = NULL;
+	ELEMENTO *aux=NULL;
+	fp=fopen("Especialidades.txt", "w");
+	
+	if(fp==NULL){
+		printf("Erro no ficheiro!\n");
+		system("pause"); return -1;
+	}
+	
+	for(aux = iniLista; aux != NULL; aux = aux->seguinte){
+		printf("Nomes Gravados em ficheiro:\n");
+		printf("%s\n", aux->info.nome);
+	}
+	
+	for(aux = iniLista; aux != NULL; aux = aux->seguinte){
+		fprintf(fp,"%s\n", aux->info.nome);
+	}
+	system("pause");
+	fclose(fp); 
+	return 0;
+}
+
 int lerMedicos(ELEMENTO *iniLista){
 	
 	FILE *fp = NULL;
@@ -112,7 +136,7 @@ int lerMedicos(ELEMENTO *iniLista){
 	
 	fread(aux,sizeof(MEDICO),1,fp);
 	
-	for(int i = 0; i < ){
+	while(!feof(fp)){
 		printf("%i: %i - %s - %i - %s - %i - %s\n",
 		aux->info.numero,
 		aux->info.n_ordem,
@@ -126,6 +150,13 @@ int lerMedicos(ELEMENTO *iniLista){
 	
 	fclose(fp);
 	return res;
+}
+
+void listaAlfabetica(ELEMENTO *iniLista){
+	
+	/*ELEMENTO *aux = NULL;
+	printf("%s/n", aux->info.nome);*/
+	
 }
 
 //menu de medicos
@@ -160,17 +191,22 @@ int menuMed(){
 				listaMedicos(iniLista); 
 			break;
 			
-			case 4: 
+			case 4:
 				newMedico = inserirMedico(&num);
 				inserirFimLista(&iniLista, &fimLista, newMedico);
 			break;
 			
+			case 5:
+				listaAlfabetica(iniLista);
+			break;
+						
 			case 9:
 				gravaMedicos(iniLista);
 				lerMedicos(iniLista);
 			break;
 			
 			case 10: lerMedicos(iniLista); break;
+			case 11: gravaEspecialidadesMedicos(iniLista); break;
 			
 		}		
 	}while(opc != 0);	

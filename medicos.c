@@ -3,7 +3,6 @@
 MEDICO inserirMedico(int *num){
 	
 	MEDICO aux;
-
 	(*num)++;
 	aux.numero = (*num);
 	
@@ -60,6 +59,17 @@ int inserirFimLista(ELEMENTO **iniLista, ELEMENTO **fimLista, MEDICO newMedico){
 	}return 0; 
 }
 
+void limparLista(ELEMENTO **iniLista){
+    ELEMENTO *aux=NULL, *prox=NULL;
+    aux = (*iniLista);
+    while(aux!=NULL){
+        prox=aux->seguinte;
+        free(aux);
+        aux=prox;
+    }
+    (*iniLista)=NULL;
+}
+
 int listaMedicos(ELEMENTO *iniLista){
 	
 	ELEMENTO *aux=NULL;
@@ -79,10 +89,10 @@ int listaMedicos(ELEMENTO *iniLista){
 		aux->info.data_entrada);
 	}
 	system("pause");
-	
 }
 
 int gravaMedicos(ELEMENTO *iniLista){
+	
 	FILE *fp = NULL;
 	ELEMENTO *aux=NULL;
 	int res=0;
@@ -152,10 +162,77 @@ int lerMedicos(ELEMENTO *iniLista){
 	return res;
 }
 
-void listaAlfabetica(ELEMENTO *iniLista){
+int getSize(ELEMENTO *iniLista){
+	int total=0;
+	ELEMENTO *aux=NULL;
 	
-	/*ELEMENTO *aux = NULL;
-	printf("%s/n", aux->info.nome);*/
+	for(aux=iniLista; aux!=NULL; aux=aux->seguinte){
+		total++;
+	}
+	printf("%i Entradas\n", total); 
+	system("pause");
+	return total;
+}
+
+//sort em listas ligadas
+//total = getTamanho
+void listaAlfabetica(ELEMENTO *iniLista, int total){
+	
+	ELEMENTO *aux = *prox;
+	MEDICO medicos[TOTAL_MED];
+	MEDICO temp;
+	int i = 0;
+	
+	if(iniLista <= NULL){
+		printf("Nao existem dados\n");
+		system("pause"); return;
+	}
+	
+	
+	for(i=0; i<total; i++){
+		for(aux=iniLista; aux->seguinte != NULL; aux=aux->seguinte){
+			if(strcmp(aux->info.nome, aux->seguinte->info.nome) < 0){	
+				temp = aux->info;
+				aux->info = aux->seguinte->info;
+				aux->seguinte->info = temp;
+			}
+		}
+	}
+	
+			//printf("%s", aux->info.nome);
+			//printf("%s", *aux->seguinte->info.nome);
+	//Antigo
+/*	for(i=0; i<total; i++){
+		for(aux = iniLista; aux->seguinte != NULL; aux=aux->seguinte){			
+			if(strcmp(aux->info.nome, aux->seguinte->info.nome) < 0){	
+				temp = aux->info;
+				aux->info = aux->seguinte->info;
+				aux->seguinte->info = temp;
+			}
+		}
+	}*/
+	
+/*	for(i=0; i<total; i++){
+		for(aux = iniLista; aux->seguinte != NULL; aux=aux->seguinte){
+			if(strcmp(aux->info.nome, aux->seguinte->info.nome) < 0){
+				temp = aux->info;
+				aux->info = aux->seguinte->info;
+				aux->seguinte->info = temp;
+			}
+		}
+	}*/
+	
+/*	for(aux = iniLista; aux != NULL; aux=aux->seguinte){
+		printf("%i: %i - %s - %i - %s - %i - %s\n",
+		aux->info.numero,
+		aux->info.n_ordem,
+		aux->info.nome,
+		aux->info.NIF,
+		aux->info.morada, 
+		aux->info.telefone, 
+		aux->info.data_entrada);
+	}*/
+	system("pause");
 	
 }
 
@@ -164,7 +241,7 @@ int menuMed(){
 	setlocale(LC_ALL, "Portuguese");
 	MEDICO newMedico;
 	ELEMENTO *iniLista = NULL, *fimLista=NULL;
-	int opc=0, num=0;
+	int opc=0, num=0, total = 0;
 
 	do{
 		system("cls");
@@ -197,9 +274,10 @@ int menuMed(){
 			break;
 			
 			case 5:
-				listaAlfabetica(iniLista);
+				getSize(iniLista);
+				listaAlfabetica(iniLista, total);
 			break;
-						
+			
 			case 9:
 				gravaMedicos(iniLista);
 				lerMedicos(iniLista);
@@ -207,7 +285,6 @@ int menuMed(){
 			
 			case 10: lerMedicos(iniLista); break;
 			case 11: gravaEspecialidadesMedicos(iniLista); break;
-			
-		}		
+		}
 	}while(opc != 0);	
 }

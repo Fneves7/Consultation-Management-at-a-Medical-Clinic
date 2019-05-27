@@ -73,7 +73,7 @@ void limparLista(ELEMENTO **iniLista){
 int listaMedicos(ELEMENTO *iniLista){
 	
 	ELEMENTO *aux=NULL;
-	if(iniLista <= NULL){
+	if(iniLista == NULL){
 		printf("Nao existem dados\n");
 		system("pause"); return -1;
 	}
@@ -170,7 +170,7 @@ int getSize(ELEMENTO *iniLista){
 		total++;
 	}
 	printf("%i Entradas\n", total); 
-	system("pause");
+	//system("pause");
 	return total;
 }
 
@@ -178,71 +178,36 @@ int getSize(ELEMENTO *iniLista){
 //total = getTamanho
 void listaAlfabetica(ELEMENTO *iniLista, int total){
 	
-	ELEMENTO *aux = *prox;
-	MEDICO medicos[TOTAL_MED];
-	MEDICO temp;
-	int i = 0;
+	int j=0, x=0, max=0, min=0;
+	MEDICO aux[45];
 	
-	if(iniLista <= NULL){
+	if(iniLista == NULL){
 		printf("Nao existem dados\n");
 		system("pause"); return;
 	}
-	
-	
-	for(i=0; i<total; i++){
-		for(aux=iniLista; aux->seguinte != NULL; aux=aux->seguinte){
-			if(strcmp(aux->info.nome, aux->seguinte->info.nome) < 0){	
-				temp = aux->info;
-				aux->info = aux->seguinte->info;
-				aux->seguinte->info = temp;
-			}
-		}
-	}
-	
-			//printf("%s", aux->info.nome);
-			//printf("%s", *aux->seguinte->info.nome);
-	//Antigo
-/*	for(i=0; i<total; i++){
-		for(aux = iniLista; aux->seguinte != NULL; aux=aux->seguinte){			
-			if(strcmp(aux->info.nome, aux->seguinte->info.nome) < 0){	
-				temp = aux->info;
-				aux->info = aux->seguinte->info;
-				aux->seguinte->info = temp;
-			}
-		}
-	}*/
-	
-/*	for(i=0; i<total; i++){
-		for(aux = iniLista; aux->seguinte != NULL; aux=aux->seguinte){
-			if(strcmp(aux->info.nome, aux->seguinte->info.nome) < 0){
-				temp = aux->info;
-				aux->info = aux->seguinte->info;
-				aux->seguinte->info = temp;
-			}
-		}
-	}*/
-	
-/*	for(aux = iniLista; aux != NULL; aux=aux->seguinte){
+
+	printf("%i", total);
+
+	for(x=0;x<total;x++){
 		printf("%i: %i - %s - %i - %s - %i - %s\n",
-		aux->info.numero,
-		aux->info.n_ordem,
-		aux->info.nome,
-		aux->info.NIF,
-		aux->info.morada, 
-		aux->info.telefone, 
-		aux->info.data_entrada);
-	}*/
+		aux[x].numero,
+		aux[x].n_ordem,
+		aux[x].nome,
+		aux[x].NIF,
+		aux[x].morada,
+		aux[x].telefone,
+		aux[x].data_entrada);
+	}
 	system("pause");
-	
 }
 
 //menu de medicos
 int menuMed(){
 	setlocale(LC_ALL, "Portuguese");
 	MEDICO newMedico;
-	ELEMENTO *iniLista = NULL, *fimLista=NULL;
+	ELEMENTO *iniLista=NULL, *fimLista=NULL;
 	int opc=0, num=0, total = 0;
-
+	
 	do{
 		system("cls");
 		printf("\t\t CLINICA MEDICA\n\n");

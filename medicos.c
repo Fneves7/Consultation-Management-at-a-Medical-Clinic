@@ -169,8 +169,7 @@ int getSize(ELEMENTO *iniLista){
 	for(aux=iniLista; aux!=NULL; aux=aux->seguinte){
 		total++;
 	}
-	printf("%i Entradas\n", total); 
-	//system("pause");
+	printf("[Funct. getSize]Tamanho de entradas: %i\n", total); 
 	return total;
 }
 
@@ -178,26 +177,56 @@ int getSize(ELEMENTO *iniLista){
 //total = getTamanho
 void listaAlfabetica(ELEMENTO *iniLista, int total){
 	
-	int j=0, x=0, max=0, min=0;
-	MEDICO aux[45];
+	ELEMENTO *aux;
+	MEDICO temp;
+	int i = 0;
+	
+	for(i=0; i<TOTAL_MED; i++){
+		for(aux = iniLista; aux->seguinte != NULL; aux=aux->seguinte){
+			if(strcmp(aux->info.nome, aux->seguinte->info.nome) > 0){	
+				temp = aux->info;
+				aux->info = aux->seguinte->info;
+				aux->seguinte->info = temp;
+			}
+		}
+	}
+	
+	//A FUNCIONAR POR ARRAY DE ESTRUTURAS
+	/*int i=0, j=0, qtd=0;
+	MEDICO medicos[TOTAL_MED];
+	MEDICO aux;
+	ELEMENTO *aux_medicos = NULL;
 	
 	if(iniLista == NULL){
 		printf("Nao existem dados\n");
 		system("pause"); return;
 	}
 
-	printf("%i", total);
-
-	for(x=0;x<total;x++){
-		printf("%i: %i - %s - %i - %s - %i - %s\n",
-		aux[x].numero,
-		aux[x].n_ordem,
-		aux[x].nome,
-		aux[x].NIF,
-		aux[x].morada,
-		aux[x].telefone,
-		aux[x].data_entrada);
+	printf("Total registos: %i\n", total);
+	
+	 for(aux_medicos=iniLista;aux_medicos!=NULL;aux_medicos=aux_medicos->seguinte){
+    	medicos[qtd]=aux_medicos->info;
+    	qtd++;
 	}
+	
+	for(i=0; i<qtd; i++){
+		for(j=0;j<qtd-1;j++){
+    		if(strcmp(medicos[j].nome, medicos[j+1].nome) > 0){
+				aux = medicos[j+1];
+				medicos[j+1] = medicos[j];
+				medicos[j] = aux;
+         	}
+		}
+				
+		printf("%i: %i - %s - %i - %s - %i - %s\n",
+		medicos[i].numero,
+		medicos[i].n_ordem,
+		medicos[i].nome,
+		medicos[i].NIF,
+		medicos[i].morada,
+		medicos[i].telefone,
+		medicos[i].data_entrada);
+	}*/
 	system("pause");
 }
 
@@ -217,7 +246,7 @@ int menuMed(){
 		printf("2- Listar informação sobre as especialidades\n");
 		printf("3- Alterar preços das consultas\n");
 		printf("4- Acrescentar informação sobre um médico.\n");
-		printf("5- Listar informação sobre todos os médicos da clínica por ordem alfabética do nome\n");
+		printf("5- Listar informação sobre todos os médicos da clínica por ordem alfabética do nome\n"); //FEITO tanto por array como por listas
 		printf("6- Alterar a informação sobre o médico, nomeadamente a morada e nº telefone\n");
 		printf("7- Listar todos os médicos de uma determinada especialidade\n");
 		printf("8- Colocar um médico indisponível (por ex. doença) durante um período de tempo, deixando de ter possibilidade de marcar consultas para esse período\n");
@@ -251,5 +280,5 @@ int menuMed(){
 			case 10: lerMedicos(iniLista); break;
 			case 11: gravaEspecialidadesMedicos(iniLista); break;
 		}
-	}while(opc != 0);	
+	}while(opc != 0);
 }

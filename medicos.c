@@ -1,4 +1,87 @@
 #include "medicos.h"
+#include "especialidades.h"
+
+ESP criarEspec(){
+	
+	ESP espec;
+		
+	fflush(stdin);
+	printf("Introduza o nome da especialidade:\n");
+	gets(espec.nome);
+	
+	printf("Introduza o valor da consulta:\n");
+	scanf("%f", &espec.valorConsulta);
+	
+	printf("Especialidade:%s - Valor da consulta: %.2f\n", espec.nome, espec.valorConsulta);
+	system("pause");
+	
+	return espec;
+}
+
+int inserirFimListaESP(ELEM_ESP **iniListaEsp, ELEM_ESP **fimListaEsp, ESP newEspecialidade){
+	
+	ELEM_ESP *novo = NULL, *aux=NULL;
+	novo = (ELEM_ESP *) calloc(1, sizeof(ELEM_ESP));
+	
+	if(novo == NULL){
+		printf("OUT OF MEMORY!\n"); 
+		return -1;
+	}
+	novo->info = newEspecialidade;
+	novo->esp_seguinte = NULL;
+	
+	if(*iniListaEsp == NULL){
+		*iniListaEsp = novo;
+		}else{
+			aux =*iniListaEsp;
+			while(aux->esp_seguinte != NULL){ aux=aux->esp_seguinte; }
+			aux->esp_seguinte=novo;
+	}return 0;
+}
+
+void listarEspecialidades(ELEM_ESP *iniListaEsp){
+	
+	ELEM_ESP *aux=NULL;
+	if(iniListaEsp == NULL){
+		printf("Nao existem dados\n");
+		system("pause"); return;
+	}
+	
+	printf("Especialidades:\n");
+	for(aux = iniListaEsp; aux != NULL; aux=aux->esp_seguinte){
+		printf("%s - Valor da consulta: %.2f\n", aux->info.nome, aux->info.valorConsulta);
+	}
+	system("pause");
+}
+
+void alteraConsulta(ELEM_ESP *iniListaEsp){
+	
+	char nome[100];
+	float valor=0;
+	ELEM_ESP *aux=NULL;
+
+    if(iniListaEsp==NULL){
+        printf("Erro: Não existem dados!\n");
+        system("PAUSE");
+        system("cls");
+        return;
+    }
+	
+	fflush(stdin);
+	printf("Int. o nome da especialidade:\n");
+	gets(nome);
+	
+	for(aux = iniListaEsp; aux != NULL; aux=aux->esp_seguinte){
+		
+		if(strcmp(nome, aux->info.nome) == 0){
+			
+			printf("Int. o novo valor da consulta:\n");
+			scanf("%f", &valor);	
+			aux->info.valorConsulta=valor;
+			//return aux;
+		}
+	}
+}
 
 MEDICO inserirMedico(int *num){
 	
@@ -47,13 +130,13 @@ int inserirFimLista(ELEMENTO **iniLista, ELEMENTO **fimLista, MEDICO newMedico){
 	}
 	novo -> info = newMedico;
 	novo -> seguinte = NULL;
-	novo->anterior=NULL;
+	//novo->anterior=NULL;
 	
 	if(*iniLista == NULL){
 		*iniLista = novo;
 		*fimLista = novo;
 		}else{
-		novo->anterior = *fimLista;
+		//novo->anterior = *fimLista;
 		(*fimLista)->seguinte=novo;	
 		*fimLista = novo;
 	}return 0; 
@@ -111,7 +194,10 @@ int gravaMedicos(ELEMENTO *iniLista){
 
 int gravaEspecialidadesMedicos(ELEMENTO *iniLista){
 	
+	int i=0;
+	
 	FILE *fp = NULL;
+	MEDICO temp;
 	ELEMENTO *aux=NULL;
 	fp=fopen("Especialidades.txt", "w");
 	
@@ -120,13 +206,24 @@ int gravaEspecialidadesMedicos(ELEMENTO *iniLista){
 		system("pause"); return -1;
 	}
 	
-	for(aux = iniLista; aux != NULL; aux = aux->seguinte){
-		printf("Nomes Gravados em ficheiro:\n");
-		printf("%s\n", aux->info.nome);
+	for(i=0; i<TOTAL_MED; i++){
+		for(aux = iniLista; aux->seguinte != NULL; aux=aux->seguinte){
+			if(strcmp(aux->info.especialidade, aux->seguinte->info.especialidade) > 0){	
+				temp = aux->info;
+				aux->info = aux->seguinte->info;
+				aux->seguinte->info = temp;
+			}
+		}
 	}
 	
+	printf("Dados Gravados no ficheiro:\n");
 	for(aux = iniLista; aux != NULL; aux = aux->seguinte){
-		fprintf(fp,"%s\n", aux->info.nome);
+		printf("%s - %s\n", aux->info.especialidade, aux->info.nome);
+	}
+	
+	
+	for(aux = iniLista; aux != NULL; aux = aux->seguinte){
+		fprintf(fp,"%s - %s\n", aux->info.especialidade, aux->info.nome);
 	}
 	system("pause");
 	fclose(fp); 
@@ -162,8 +259,42 @@ int lerMedicos(ELEMENTO *iniLista){
 	return res;
 }
 
-int getSize(ELEMENTO *iniLista){
-	int total=0;
+void alteraMedico(ELEMENTO *iniLista){
+	
+	int nordem=0, telefone=0;
+	char morada[100];
+	
+	ELEMENTO *aux=NULL;
+
+    if(iniLista==NULL){
+        printf("Erro: Não existem dados!\n");
+        system("PAUSE");
+        system("cls");
+        return;
+    }
+	
+	fflush(stdin);
+	printf("Int. o numero da ordem dos medicos:\n");
+	scanf("%i", &nordem);
+	
+	for(aux = iniLista; aux != NULL; aux=aux->seguinte){
+		if(nordem == aux->info.n_ordem){
+					
+			fflush(stdin);
+			printf("Int. a nova morada:\n");
+			gets(morada);
+			
+			printf("Int. o novo numero de telefone:\n");
+			scanf("%i", &telefone);
+				
+			strcpy(aux->info.morada, morada);
+			aux->info.telefone=telefone;
+			//return aux;
+		}
+	}
+}
+
+int getSize(ELEMENTO *iniLista, int total){
 	ELEMENTO *aux=NULL;
 	
 	for(aux=iniLista; aux!=NULL; aux=aux->seguinte){
@@ -180,6 +311,8 @@ void listaAlfabetica(ELEMENTO *iniLista, int total){
 	ELEMENTO *aux;
 	MEDICO temp;
 	int i = 0;
+	
+	printf("O total do getsize e de: %i\n", total);
 	
 	for(i=0; i<TOTAL_MED; i++){
 		for(aux = iniLista; aux->seguinte != NULL; aux=aux->seguinte){
@@ -234,51 +367,64 @@ void listaAlfabetica(ELEMENTO *iniLista, int total){
 int menuMed(){
 	setlocale(LC_ALL, "Portuguese");
 	MEDICO newMedico;
+	ESP newEspecialidade;
 	ELEMENTO *iniLista=NULL, *fimLista=NULL;
-	int opc=0, num=0, total = 0;
+	ELEM_ESP *iniListaEsp=NULL, *fimListaEsp=NULL;;
+	int opc=0, num=0, total=0;
+	
+	lerMedicos(iniLista);
 	
 	do{
 		system("cls");
 		printf("\t\t CLINICA MEDICA\n\n");
 		printf("\tMENU DE MEDICOS\n\n");
 		printf("Introduza a opcao:\n\n");
-		printf("1- Criar especialidades e preços das consultas\n");
-		printf("2- Listar informação sobre as especialidades\n");
-		printf("3- Alterar preços das consultas\n");
-		printf("4- Acrescentar informação sobre um médico.\n");
+		printf("1- Criar especialidades e preços das consultas\n"); //FEITO
+		printf("2- Listar informação sobre as especialidades\n"); //FEITO
+		printf("3- Alterar preços das consultas\n"); //FEITO
+		printf("4- Acrescentar informação sobre um médico.\n"); //FEITO inc isto é acrescentar nao adicionar
 		printf("5- Listar informação sobre todos os médicos da clínica por ordem alfabética do nome\n"); //FEITO tanto por array como por listas
-		printf("6- Alterar a informação sobre o médico, nomeadamente a morada e nº telefone\n");
+		printf("6- Alterar a informação sobre o médico, nomeadamente a morada e nº telefone\n");//FEITO
 		printf("7- Listar todos os médicos de uma determinada especialidade\n");
 		printf("8- Colocar um médico indisponível (por ex. doença) durante um período de tempo, deixando de ter possibilidade de marcar consultas para esse período\n");
 		printf("9- Criar um ficheiro de texto com as especialidades e o nome dos respetivos médicos. A informação deve estar ordenada pelo nome da especialidade\n");
+		printf("10- Listar todos os medicos\n");
 		printf("0- voltar\n\n");
 		printf(">"); scanf("%i",&opc);
 		
 		switch(opc){
 			default: printf("Opcao Errada\n");
 			case 0: return -1; break;
-			
-			case 2:
-				listaMedicos(iniLista); 
+			case 1:
+				newEspecialidade = criarEspec();
+				inserirFimListaESP(&iniListaEsp, &iniListaEsp, newEspecialidade);
 			break;
 			
+			case 2: listarEspecialidades(iniListaEsp); break;			
+			case 3: alteraConsulta(iniListaEsp); break;		
 			case 4:
 				newMedico = inserirMedico(&num);
 				inserirFimLista(&iniLista, &fimLista, newMedico);
 			break;
 			
 			case 5:
-				getSize(iniLista);
+				getSize(iniLista, total);
 				listaAlfabetica(iniLista, total);
+				listaMedicos(iniLista);
 			break;
 			
-			case 9:
-				gravaMedicos(iniLista);
-				lerMedicos(iniLista);
+			case 6: alteraMedico(iniLista); break;
+			
+			case 7:
+				//por fazer 
+			break;
+			case 8: 
+				//por fazer
 			break;
 			
-			case 10: lerMedicos(iniLista); break;
-			case 11: gravaEspecialidadesMedicos(iniLista); break;
+			case 9: gravaEspecialidadesMedicos(iniLista); break;
+			case 10: listaMedicos(iniLista); break;
 		}
 	}while(opc != 0);
+	gravaMedicos(iniLista);
 }

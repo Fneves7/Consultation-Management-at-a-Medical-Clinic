@@ -12,6 +12,6 @@ typedef struct especialidade{
 
 typedef struct Elem_esp{
 	ESP info;
-	//struct Elem_esp *esp_anterior;
-	struct Elem_esp *esp_seguinte;
+	//struct Elem_esp *anterior;
+	struct Elem_esp *seguinte;
 }ELEM_ESP;

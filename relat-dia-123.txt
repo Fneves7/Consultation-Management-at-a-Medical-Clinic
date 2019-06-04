@@ -1,3 +1,0 @@
-Data consulta: 
-Medico consulta: sers\FNNev\Documents\GitHub\Prog1\Clinica.exe
-Paciente consulta: @

@@ -1,3 +1,24 @@
+//FUNCIONA NAO MEXER
+/*MEDICO lerFicheiroMed(){
+	
+	MEDICO aux;
+	int res=0;
+	FILE *fp = fopen("medicos.dat", "rb");
+	
+	if(!fp){
+		printf("Erro de ficheiro.\n"); return;
+	}
+	
+	while(fread(&aux, sizeof(MEDICO), 1,fp)){
+		printf("N. da ordem: %i - Nome: %s\n", aux.n_ordem, aux.nome);
+		res++;
+	}
+	printf("leu %i dados\n",res);
+	
+	fclose(fp);
+	return aux;
+}*/
+
 /*int lerMedicos(ELEM_MED *iniLista){
 	
 	ELEM_MED *aux=NULL;

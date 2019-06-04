@@ -1,6 +1,7 @@
 #include "medicos.h"
 #include "especialidades.h"
 
+//ESPECIALIDADES
 ESP criarEspec(){
 	
 	ESP espec;
@@ -39,23 +40,38 @@ int inserirFimListaESP(ELEM_ESP **iniListaEsp, ELEM_ESP **fimListaEsp, ESP newEs
 	}return 0;
 }
 
-int gravaFichEsp(){
-	
+int gravaFichEsp(ELEM_ESP *iniListaEsp){
+	int res = 0;
 	FILE *fp=NULL;
-	ESP aux;
-	fp = fopen("especialidades.dat","ab");
-	fwrite(&aux,sizeof(ESP),1,fp);
-	fclose(fp);
+	ELEM_ESP *aux;
+	fp = fopen("especialidades.dat","wb");
+	//fwrite(&aux,sizeof(ESP),1,fp);
 	
+	for(aux = iniListaEsp; aux != NULL; aux=aux->seguinte){
+		fwrite(aux,sizeof(ESP),1,fp);
+		printf("%s, em especialidades.dat inserido com sucesso \n", aux->info.nome);
+		res++;
+	}
+	
+	printf("Escreveu %i elementos com sucesso.\n", res); 
+	system("pause");
+	
+	fclose(fp);
 	return 0;
 }
 
-int lerFichEsp(){
+int lerFichEsp(ELEM_ESP **iniListaEsp, ELEM_ESP **fimListaEsp){
+	int res = 0;
 	FILE *fp=NULL;
 	ESP aux;
 	fp = fopen("especialidades.dat","rb");
-	fread(&aux,sizeof(ESP),1,fp);
-	printf("DADOS: %s\n", aux.nome); system("pause");
+	//fread(&aux,sizeof(ESP),1,fp);
+	
+	while(fread(&aux,sizeof(ESP),1,fp)){
+        inserirFimListaESP(iniListaEsp,fimListaEsp,aux);
+		res++;
+	}
+	printf("Leu: %i Especialidades\n", res); system("pause");
 	fclose(fp);
 	return 0;
 }
@@ -104,11 +120,11 @@ void alteraConsulta(ELEM_ESP *iniListaEsp){
 	}
 }
 
-//Zona dos médicos
+//MEDICOS
 MEDICO inserirMedico(int *num){
 	
-	//FILE *fp = fopen("medicos.dat", "ab");
 	MEDICO aux;
+	
 	(*num)++;
 	aux.numero = (*num);
 	
@@ -153,8 +169,6 @@ MEDICO inserirMedico(int *num){
 		aux.especialidade,
 		aux.data_entrada); system("pause");
 	
-	//fwrite(&aux, sizeof(MEDICO), 1,fp);
-	//fclose(fp);
 	return aux;
 }
 
@@ -331,7 +345,6 @@ void ordemAlfabetica(ELEM_MED *iniLista){
 			}
 		}
 	}
-	system("pause");
 }
 
 void listaMedicoEsp(ELEM_MED *iniLista, ELEM_ESP *iniListaEsp){
@@ -506,8 +519,7 @@ int getSize(ELEM_MED *iniLista){
 	return tam;
 }
 
-//FUNCIONA NAO MEXER
-/*MEDICO lerFicheiroMed(){
+int lerFicheiroMed(ELEM_MED **iniLista){
 	
 	MEDICO aux;
 	int res=0;
@@ -518,31 +530,12 @@ int getSize(ELEM_MED *iniLista){
 	}
 	
 	while(fread(&aux, sizeof(MEDICO), 1,fp)){
-		printf("N. da ordem: %i - Nome: %s\n", aux.n_ordem, aux.nome);
-		res++;
-	}
-	printf("leu %i dados\n",res);
-	
-	fclose(fp);
-	return aux;
-}*/
-
-int lerFicheiroMed(ELEM_MED *iniLista){
-	
-	MEDICO aux;
-	int res=0;
-	FILE *fp = fopen("medicos.dat", "rb");
-	
-	if(!fp){
-		printf("Erro de ficheiro.\n"); return;
-	}
-	
-	while(fread(&aux, sizeof(MEDICO), 1,fp)){
-		printf("N. da ordem: %i - Nome: %s\n", aux.n_ordem, aux.nome);
+		//printf("N. da ordem: %i - Nome: %s\n", aux.n_ordem, aux.nome);
         inserirFimLista(iniLista,aux);
 		res++;
 	}
-	printf("leu %i dados\n",res);
+	printf("Leu: %i Medicos\n",res);
+	system("pause");
 	fclose(fp);
 	return 0;
 }
@@ -566,9 +559,9 @@ int printMedMenu(int total){
 	printf("8- Colocar um médico indisponível (por ex. doença) durante um período de tempo, deixando de ter possibilidade de marcar consultas para esse período\n");//FEITO
 	printf("9- Criar um ficheiro de texto com as especialidades e o nome dos respetivos médicos. A informação deve estar ordenada pelo nome da especialidade\n");//FEITO
 	printf("10- Atribuir especialidade a um medico\n");//FEITO
-	printf("11- Listar todos os medicos //DEBUG\n");//DEBUG
-	printf("12- Gravar/Ler Binario //DEBUG\n");//DEBUG
-	printf("13- LerFicheiro //DEBUG\n");//DEBUG
+	//printf("11- Listar todos os medicos //DEBUG\n");//DEBUG
+	//printf("12- Gravar/Ler Binario //DEBUG\n");//DEBUG
+	//printf("13- LerFicheiro //DEBUG\n");//DEBUG
 	
 	printf("0- voltar\n\n");
 	printf(">"); 
@@ -576,7 +569,6 @@ int printMedMenu(int total){
 	return opc;
 }
 
-//menu de medicos
 int menuMed(){
 	setlocale(LC_ALL, "Portuguese");
 	int opc=0, num=0, total=0, test =0;
@@ -587,14 +579,16 @@ int menuMed(){
 	MEDICO newMedico;
 	ESP newEspecialidade;
 	
-	lerFicheiroMed(&iniLista); system("pause");
+	lerFicheiroMed(&iniLista);
+	lerFichEsp(&iniListaEsp,&fimListaEsp);
 	
 	do{
 		opc=printMedMenu(total);
 		switch(opc){
 			default: printf("Opcao Errada\n"); system("pause"); break;
 			case 0:
-				gravaMedicos(iniLista); 
+				gravaMedicos(iniLista);
+				gravaFichEsp(iniListaEsp);
 				return -1; 
 			break;
 			case 1:
@@ -619,11 +613,9 @@ int menuMed(){
 			case 8: baixaMedico(iniLista); break;
 			case 9: gravaEspecialidadesMedicos(iniLista); break;
 			case 10: addEspecialidadeMedico(iniLista, iniListaEsp); break;
-			case 11: listaMedicos(iniLista); break;
-			case 12: gravaMedicos(iniLista); gravaFichEsp(); break;
-			case 13: lerFicheiroMed(iniLista); system("pause"); break;
+			//case 11: listaMedicos(iniLista); break;
+			//case 12: gravaMedicos(iniLista); gravaFichEsp(); break;
+			//case 13: lerFicheiroMed(iniLista); system("pause"); break;
 		}
 	}while(opc != 0);
 }
-
-

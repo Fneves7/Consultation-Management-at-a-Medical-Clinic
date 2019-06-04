@@ -12,21 +12,22 @@ typedef struct medico{
 	bool disponibilidade;
 }MEDICO;
 
-typedef struct Elem{
+typedef struct Elem_med{
 	MEDICO info;
-	struct Elem *seguinte;
+	struct Elem_med *seguinte;
 }ELEM_MED;
 
 //Menu
 int menuMed();
 //Funcoes de Medicos
 MEDICO inserirMedico(int *num);
-int inserirFimLista(ELEM_MED **iniLista, ELEM_MED **fimLista, MEDICO newMedico);
+int inserirFimLista(ELEM_MED **iniLista, MEDICO newMedico);
 int listaMedicos(ELEM_MED *iniLista);
-int getSize(ELEM_MED *iniLista, int total);
+int getSize(ELEM_MED *iniLista);
 void listaAlfabetica(ELEM_MED *iniLista, int total);
 //Funcoes de ficheiros
-//int gravaMedicos(ELEM_MED *iniLista);
+int gravaMedicos(ELEM_MED *iniLista);
 int gravaEspecialidadesMedicos(ELEM_MED *iniLista);
-int lerMedicos(ELEM_MED *iniLista);
+//int lerMedicos(ELEM_MED *iniLista);
 void limparLista(ELEM_MED **iniLista);
+int lerFicheiroMed();

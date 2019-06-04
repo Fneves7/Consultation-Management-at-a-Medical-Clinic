@@ -104,7 +104,6 @@ void alteraConsulta(ELEM_ESP *iniListaEsp){
 	}
 }
 
-
 //Zona dos médicos
 MEDICO inserirMedico(int *num){
 	
@@ -159,9 +158,28 @@ MEDICO inserirMedico(int *num){
 	return aux;
 }
 
-int inserirFimLista(ELEM_MED **iniLista, ELEM_MED **fimLista, MEDICO newMedico){
+int inserirFimLista(ELEM_MED **iniLista, MEDICO newMedico){
 	
-	ELEM_MED *novo = NULL;
+	ELEM_MED *novo = NULL, *aux=NULL;
+	novo = (ELEM_MED *) calloc(1, sizeof(ELEM_MED));
+	
+	if(novo == NULL){
+		printf("OUT OF MEMORY!\n"); 
+		return -1;
+	}
+	novo -> info = newMedico;
+	novo -> seguinte = NULL;
+	
+	if(*iniLista == NULL){
+		*iniLista = novo;
+		}else{
+			aux =*iniLista;
+			while(aux->seguinte != NULL){ aux=aux->seguinte; }
+			aux->seguinte=novo;
+	}
+	return 0;
+	
+	/*ELEM_MED *novo = NULL;
 	novo = (ELEM_MED *) calloc(1, sizeof(ELEM_MED));
 	
 	if(novo == NULL){
@@ -177,7 +195,7 @@ int inserirFimLista(ELEM_MED **iniLista, ELEM_MED **fimLista, MEDICO newMedico){
 		}else{
 		(*fimLista)->seguinte=novo;	
 		*fimLista = novo;
-	}return 0; 
+	}return 0; */
 }
 
 void limparLista(ELEM_MED **iniLista){
@@ -291,7 +309,6 @@ void alteraMedico(ELEM_MED *iniLista){
 	}
 }
 
-//sort em listas ligadas
 void ordemAlfabetica(ELEM_MED *iniLista){
 	
 	ELEM_MED *aux;
@@ -314,43 +331,6 @@ void ordemAlfabetica(ELEM_MED *iniLista){
 			}
 		}
 	}
-	
-	//A FUNCIONAR POR ARRAY DE ESTRUTURAS
-	/*int i=0, j=0, qtd=0;
-	MEDICO medicos[TOTAL_MED];
-	MEDICO aux;
-	ELEM_MED *aux_medicos = NULL;
-	
-	if(iniLista == NULL){
-		printf("Nao existem dados\n");
-		system("pause"); return;
-	}
-
-	printf("Total registos: %i\n", total);
-	
-	 for(aux_medicos=iniLista;aux_medicos!=NULL;aux_medicos=aux_medicos->seguinte){
-    	medicos[qtd]=aux_medicos->info;
-    	qtd++;
-	}
-	
-	for(i=0; i<qtd; i++){
-		for(j=0;j<qtd-1;j++){
-    		if(strcmp(medicos[j].nome, medicos[j+1].nome) > 0){
-				aux = medicos[j+1];
-				medicos[j+1] = medicos[j];
-				medicos[j] = aux;
-         	}
-		}
-				
-		printf("%i: %i - %s - %i - %s - %i - %s\n",
-		medicos[i].numero,
-		medicos[i].n_ordem,
-		medicos[i].nome,
-		medicos[i].NIF,
-		medicos[i].morada,
-		medicos[i].telefone,
-		medicos[i].data_entrada);
-	}*/
 	system("pause");
 }
 
@@ -488,13 +468,13 @@ void baixaMedico(ELEM_MED *iniLista){
 	}
 }
 
+//GRAVAR DA BUFFER PARA FICHEIRO BINARIO
 int gravaMedicos(ELEM_MED *iniLista){
 	
-	//MEDICO aux;
 	ELEM_MED *aux = NULL;
 	FILE *fp = NULL;
 	int res=0;
-	fp=fopen("medicos.dat", "ab");
+	fp=fopen("medicos.dat", "wb");
 	
 	if(fp==NULL){
 		printf("Erro no ficheiro!\n");
@@ -502,10 +482,10 @@ int gravaMedicos(ELEM_MED *iniLista){
 		return -1;
 	}
 	
-	//fwrite(&aux, sizeof(MEDICO), 1,fp);
 	for(aux = iniLista; aux != NULL; aux=aux->seguinte){
-		res=fwrite(&aux, sizeof(MEDICO), TOTAL_MED, fp);
-		printf("%s, em medicos.dat inserido com sucesso \n", aux->info.nome); 
+		fwrite(aux, sizeof(MEDICO), 1, fp);
+		printf("%s, em medicos.dat inserido com sucesso \n", aux->info.nome);
+		res++;
 	}
 	
 	printf("Escreveu %i elementos com sucesso.\n", res); 
@@ -515,104 +495,57 @@ int gravaMedicos(ELEM_MED *iniLista){
 	return 0;
 }
 
-MEDICO lerFicheiroMed(MEDICO newMedico){
+int getSize(ELEM_MED *iniLista){
+	int tam=0;
+	ELEM_MED *aux = NULL;
 	
-	MEDICO aux;
-	FILE *fp = NULL;
-	int res=0;
-	fp = fopen("medicos.dat", "rb");
-	
-	if(!fp){
-		printf("Erro de ficheiro.\n"); 
-		system("pause"); 
+	for(aux = iniLista; aux != NULL; aux= aux->seguinte){ 
+	tam++;
 	}
 	
-      fread(&aux, sizeof(MEDICO), 1,fp);
-    /*while(!feof(fp)){
-		res = fread(&aux, sizeof(MEDICO), 1,fp);
-		printf("numero da ordem: %i\n", aux.n_ordem);
-		printf("Nome: %s\n", aux.nome);	
-	}*/
+	return tam;
+}
+
+//FUNCIONA NAO MEXER
+/*MEDICO lerFicheiroMed(){
 	
+	MEDICO aux;
+	int res=0;
+	FILE *fp = fopen("medicos.dat", "rb");
 	
+	if(!fp){
+		printf("Erro de ficheiro.\n"); return;
+	}
 	
-	/*
-	res = fread(&aux, sizeof(MEDICO), 1,fp);
-		printf("%i: %i - %s - %i - %s - %i - %s - Data de entrada: %s - \n",
-		aux.numero,
-		aux.n_ordem,
-		aux.nome,
-		aux.NIF,
-		aux.morada, 
-		aux.telefone, 
-		aux.especialidade,
-		aux.data_entrada);
- */
-	/*	while(fread(&aux, sizeof(MEDICO), 1,fp)){
-		res = fread(&aux, sizeof(MEDICO), 1,fp);
-		printf("Nome: %s\n", aux.nome);	
-		printf("numero da ordem: %i\n", aux.n_ordem);
-		
-	}*/
-	/*while(fread(&aux, sizeof(MEDICO), 1,fp)){
-		res = fread(&aux, sizeof(MEDICO), 1,fp);
-		printf("%i: %i - %s - %i - %s - %i - %s - Data de entrada: %s - \n",
-		aux.numero,
-		aux.n_ordem,
-		aux.nome,
-		aux.NIF,
-		aux.morada, 
-		aux.telefone, 
-		aux.especialidade,
-		aux.data_entrada);		
-	} */
-	printf("Leu %i elementos com sucesso.\n", res); 
-	system("pause");
+	while(fread(&aux, sizeof(MEDICO), 1,fp)){
+		printf("N. da ordem: %i - Nome: %s\n", aux.n_ordem, aux.nome);
+		res++;
+	}
+	printf("leu %i dados\n",res);
 	
 	fclose(fp);
 	return aux;
-}
+}*/
 
-/*int lerMedicos(ELEM_MED *iniLista){
+int lerFicheiroMed(ELEM_MED *iniLista){
 	
-	ELEM_MED *aux=NULL;
-	FILE *fp = NULL;
-	
+	MEDICO aux;
 	int res=0;
-	fp=fopen("medicos.dat", "rb");
+	FILE *fp = fopen("medicos.dat", "rb");
 	
-	if(fp==NULL){
-		printf("Erro ao ler ficheiro Medicos.dat!\n"); 
-		return 0;
+	if(!fp){
+		printf("Erro de ficheiro.\n"); return;
 	}
 	
-	/*while(!feof(fp)){
-        res=fread(&aux,sizeof(MEDICO),1,fp);
-        if(res){
-            inserirMedico(aux);
-        }
-    }*/
-	
-	/*for(aux = iniLista; aux != NULL; aux=aux->seguinte){
-		res=fread(&aux, sizeof(MEDICO), 1, fp);
-        inserirMedico();
-		printf("%i: %i - %s - %i - %s - %i - %s - Data de entrada: %s - ",
-		aux->info.numero,
-		aux->info.n_ordem,
-		aux->info.nome,
-		aux->info.NIF,
-		aux->info.morada, 
-		aux->info.telefone, 
-		aux->info.especialidade,
-		aux->info.data_entrada); system("pause");
+	while(fread(&aux, sizeof(MEDICO), 1,fp)){
+		printf("N. da ordem: %i - Nome: %s\n", aux.n_ordem, aux.nome);
+        inserirFimLista(iniLista,aux);
+		res++;
 	}
-	
-	printf("Leu %i elementos com sucesso.\n", res); 
-	sleep(1);
-	
+	printf("leu %i dados\n",res);
 	fclose(fp);
 	return 0;
-}*/
+}
 
 
 //ZONA DE MENUS
@@ -646,35 +579,34 @@ int printMedMenu(int total){
 //menu de medicos
 int menuMed(){
 	setlocale(LC_ALL, "Portuguese");
-	int opc=0, num=0, total=0;
+	int opc=0, num=0, total=0, test =0;
 	
-	ELEM_MED *iniLista=NULL, *fimLista=NULL;
+	ELEM_MED *iniLista=NULL;
 	ELEM_ESP *iniListaEsp=NULL, *fimListaEsp=NULL;
 	
 	MEDICO newMedico;
 	ESP newEspecialidade;
 	
-	newMedico=lerFicheiroMed(newMedico);
-	inserirFimLista(&iniLista, &fimLista, newMedico);
+	lerFicheiroMed(&iniLista); system("pause");
 	
 	do{
 		opc=printMedMenu(total);
 		switch(opc){
-			default: printf("Opcao Errada\n");
+			default: printf("Opcao Errada\n"); system("pause"); break;
 			case 0:
 				gravaMedicos(iniLista); 
 				return -1; 
 			break;
 			case 1:
 				newEspecialidade = criarEspec();
-				inserirFimListaESP(&iniListaEsp, &iniListaEsp, newEspecialidade);
+				inserirFimListaESP(&iniListaEsp, &fimListaEsp, newEspecialidade);
 			break;
 			
 			case 2: listarEspecialidades(iniListaEsp); break;			
 			case 3: alteraConsulta(iniListaEsp); break;		
 			case 4:
 				newMedico = inserirMedico(&num);
-				inserirFimLista(&iniLista, &fimLista, newMedico);
+				inserirFimLista(&iniLista, newMedico);
 			break;
 			
 			case 5:
@@ -689,7 +621,7 @@ int menuMed(){
 			case 10: addEspecialidadeMedico(iniLista, iniListaEsp); break;
 			case 11: listaMedicos(iniLista); break;
 			case 12: gravaMedicos(iniLista); gravaFichEsp(); break;
-			case 13: lerFicheiroMed(newMedico); break;
+			case 13: lerFicheiroMed(iniLista); system("pause"); break;
 		}
 	}while(opc != 0);
 }

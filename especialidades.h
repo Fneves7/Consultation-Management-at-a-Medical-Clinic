@@ -12,13 +12,12 @@ typedef struct especialidade{
 
 typedef struct Elem_esp{
 	ESP info;
-	//struct Elem_esp *anterior;
 	struct Elem_esp *seguinte;
 }ELEM_ESP;
 
 //FUNCOES
 ESP criarEspec();
-inserirFimListaESP(ELEM_ESP **iniListaEsp, ELEM_ESP **fimListaEsp, ESP newEspecialidade);
+int inserirFimListaESP(ELEM_ESP **iniListaEsp, ELEM_ESP **fimListaEsp, ESP newEspecialidade);
 int gravaFichEsp(ELEM_ESP *iniListaEsp);
 int lerFichEsp(ELEM_ESP **iniListaEsp, ELEM_ESP **fimListaEsp);
 void listarEspecialidades(ELEM_ESP *iniListaEsp);

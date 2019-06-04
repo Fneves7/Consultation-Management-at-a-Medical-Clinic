@@ -197,8 +197,8 @@ int menuPacIni(int total){
 	printf("2- Alterar o nº telefone e morada de um paciente.\n");
 	printf("3- Listar pacientes por ordem alfabetica.\n");
 	printf("4- Apresentar os dados de um cliente.\n");
-	printf("5- Listar todos os clientes que nasceram depois de uma determinada data.\n");
-	printf("0- Sair\n");
+	printf("5- Listar todos os clientes que nasceram depois de uma determinada data.\n\n");
+	printf("0- Sair\n\n");
 	printf(">");
 	scanf("%i",&opc);
 	return opc;

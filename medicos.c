@@ -104,9 +104,8 @@ void alteraConsulta(ELEM_ESP *iniListaEsp){
         return;
     }
 	
-	fflush(stdin);
 	printf("Int. o nome da especialidade:\n");
-	gets(nome);
+	fflush(stdin);gets(nome);
 	
 	for(aux = iniListaEsp; aux != NULL; aux=aux->seguinte){
 		
@@ -115,7 +114,6 @@ void alteraConsulta(ELEM_ESP *iniListaEsp){
 			printf("Int. o novo valor da consulta:\n");
 			scanf("%f", &valor);	
 			aux->info.valorConsulta=valor;
-			//return aux;
 		}
 	}
 }
@@ -558,11 +556,10 @@ int printMedMenu(int total){
 	printf("7- Listar todos os médicos de uma determinada especialidade\n");//FEITO
 	printf("8- Colocar um médico indisponível (por ex. doença) durante um período de tempo, deixando de ter possibilidade de marcar consultas para esse período\n");//FEITO
 	printf("9- Criar um ficheiro de texto com as especialidades e o nome dos respetivos médicos. A informação deve estar ordenada pelo nome da especialidade\n");//FEITO
-	printf("10- Atribuir especialidade a um medico\n");//FEITO
+	printf("10- Atribuir especialidade a um medico\n\n");//FEITO
 	//printf("11- Listar todos os medicos //DEBUG\n");//DEBUG
 	//printf("12- Gravar/Ler Binario //DEBUG\n");//DEBUG
 	//printf("13- LerFicheiro //DEBUG\n");//DEBUG
-	
 	printf("0- voltar\n\n");
 	printf(">"); 
 	scanf("%i",&opc);

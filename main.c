@@ -17,8 +17,8 @@ int menu(){
 	printf("\t\t CLINICA MEDICA\n\n");
 	printf("Introduza a opcao:\n\n");	
 	printf("1- Medicos\n");
-	printf("2- Pacientes Consultas\n");
-	printf("3- Fechos\n");	
+	printf("2- Pacientes\n");
+	printf("3- Consultas e Fechos\n\n");	
 	printf("0- Sair\n\n");
 	printf(">"); scanf("%i",&opc);
 	return opc;
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 			case 1: menuMed(); break;
 			case 2: menuPac(); break;
 			case 3: menuFecho(); break;
-			case 0:system("cls"); printf("\n\t\tA ENCERRAR APLICACAO...\n"); break;
+			case 0: system("cls"); printf("\n\t\tA ENCERRAR APLICACAO...\n"); break;
 			default: printf("Opcao errada!\n");
 		}
 	}while(opcao !=0);

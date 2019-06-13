@@ -1,0 +1,3 @@
+Data: 20021001 - Hora: 1010 - Especialidade: ortopedia - Medico: Bruno - Valor consulta 5,00 
+Data: 20021001 - Hora: 1015 - Especialidade: ortopedia - Medico: Antonio - Valor consulta 5,00 
+Total recebido: 10,00 

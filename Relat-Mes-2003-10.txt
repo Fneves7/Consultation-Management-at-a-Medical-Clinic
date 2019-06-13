@@ -1,0 +1,3 @@
+Data: 2003-10-01 - Hora: 15:30 - Especialidade: 1 - Medico: Bruno - Valor consulta 1,00 
+Data: 2003-10-01 - Hora: 15:30 - Especialidade: ortopedia - Medico: Bruno - Valor consulta 5,00 
+Total recebido: 10,00 

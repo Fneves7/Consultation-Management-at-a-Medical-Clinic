@@ -8,6 +8,7 @@ typedef struct especialidade{
 	float valorConsulta;
 	char nome[100];
 	struct medico *medicos;
+	struct consultas *consultas;
 }ESP;
 
 typedef struct Elem_esp{

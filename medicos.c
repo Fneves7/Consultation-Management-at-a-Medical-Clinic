@@ -45,7 +45,6 @@ int gravaFichEsp(ELEM_ESP *iniListaEsp){
 	FILE *fp=NULL;
 	ELEM_ESP *aux;
 	fp = fopen("especialidades.dat","wb");
-	//fwrite(&aux,sizeof(ESP),1,fp);
 	
 	for(aux = iniListaEsp; aux != NULL; aux=aux->seguinte){
 		fwrite(aux,sizeof(ESP),1,fp);
@@ -65,7 +64,6 @@ int lerFichEsp(ELEM_ESP **iniListaEsp, ELEM_ESP **fimListaEsp){
 	FILE *fp=NULL;
 	ESP aux;
 	fp = fopen("especialidades.dat","rb");
-	//fread(&aux,sizeof(ESP),1,fp);
 	
 	while(fread(&aux,sizeof(ESP),1,fp)){
         inserirFimListaESP(iniListaEsp,fimListaEsp,aux);
@@ -150,7 +148,7 @@ MEDICO inserirMedico(int *num){
 	scanf("%i", &aux.telefone);
 	
 	fflush(stdin);
-	printf("Introduza a data da sua entrada:\t (ex: 00-00-00)\n");
+	printf("Introduza a data da sua entrada:\t (AAAAMMDD)\n");
 	gets(aux.data_entrada);
 	
 	strcpy(aux.especialidade, "Indefinido");

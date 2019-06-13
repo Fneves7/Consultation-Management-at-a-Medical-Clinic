@@ -1,0 +1,2 @@
+Data: 2002-10-01 - Hora: 15:30 - Especialidade: ortopedia - Medico: Bruno - Valor consulta 5,00 
+Total recebido: 5,00 
